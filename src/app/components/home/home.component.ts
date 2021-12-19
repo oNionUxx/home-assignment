@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  _userScore: number;
+  _userScore: number = 20;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
     this.route.queryParams.subscribe(({ userScore }) => {
       if (userScore) {
         this._userScore = userScore;
+
+        console.log(this._userScore !== 20 ? 's' : 'YOU WON!');
       }
     });
   }

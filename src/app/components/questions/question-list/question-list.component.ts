@@ -56,6 +56,7 @@ export class QuestionListComponent implements OnInit {
         // if user got 3 strikes next
         // question will be displayed
         if (this.userStrikes === 3) {
+          alert('Sorry, too many tries');
           ++this.questionNumber;
         } else {
           ++this.userStrikes;
@@ -78,10 +79,12 @@ export class QuestionListComponent implements OnInit {
           ++this.questionNumber;
 
           // quiz was ended
-          if (this.questionNumber === this.questions.length) {
-            console.log(this.questionNumber);
+          if (this.questionNumber >= this.questions.length) {
+            alert('Quiz has been completed!');
             this.quizWasEnded.emit(this.totalUserAnswers);
-          }
+          } // else {
+          //   alert('Sorry, but you ran out of time');
+          // }
         }
 
         return this.startTime - i;
