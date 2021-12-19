@@ -17,9 +17,11 @@ export class QuestionListComponent implements OnInit {
   @Input() questions: Question[];
   @Input() errorMessage: string;
 
+  questionsTmp: Question[];
+
   @Output() quizWasEnded = new EventEmitter<number>();
 
-  startTime = 20;
+  startTime = 2;
   isCorrect: boolean;
 
   userStrikes = 1;
@@ -34,7 +36,6 @@ export class QuestionListComponent implements OnInit {
       answer: new FormControl({ value: '', disabled: !this.timer$ }, Validators.required),
     });
   }
-
   ngOnInit(): void {}
 
   onSubmit(q: Question): void {
@@ -48,7 +49,6 @@ export class QuestionListComponent implements OnInit {
         this.isCorrect = true;
         this.totalUserAnswers += 1;
         alert('Correct!, proceed to next question');
-
         ++this.questionNumber;
       } else {
         this.isCorrect = false;
@@ -79,6 +79,7 @@ export class QuestionListComponent implements OnInit {
 
           // quiz was ended
           if (this.questionNumber === this.questions.length) {
+            console.log(this.questionNumber);
             this.quizWasEnded.emit(this.totalUserAnswers);
           }
         }
