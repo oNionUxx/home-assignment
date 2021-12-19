@@ -14,20 +14,20 @@
 
         <form [formGroup]="form" (ngSubmit)="onSubmit(q)" class="form">
           <p-radioButton name="answer" [value]="q.correct_answer" formControlName="answer" class="answer"></p-radioButton>
-          <label for="answerId" [ngClass]="{ correct: isCorrect }"
-            >{{ q.correct_answer }} <span>{{ isCorrect ? ' - Correct!' : '' }}</span>
-          </label>
+          <label for="answerId">{{ q.correct_answer }} </label>
 
-          <ng-container *ngFor="let incorrect_answer of q.incorrect_answers; index as i">
-            <p-radioButton name="answer" [value]="incorrect_answer" formControlName="answer" class="answer"></p-radioButton>
-            <label for="answerId" [ngClass]="{ wrong: !isCorrect && selectedIndex === i }"
-              >{{ incorrect_answer }} <span>{{ !isCorrect && selectedIndex === i ? ' - Wrong!' : '' }}</span></label
-            >
-          </ng-container>
+          <p-radioButton name="answer" [value]="q.incorrect_answers[0]" formControlName="answer" class="answer"></p-radioButton>
+          <label for="answerId">{{ q.incorrect_answers[0] }} </label>
 
-          <button pButton type="submit" label="OK" [disabled]="!form.valid" class="ok-btn"></button>
+          <p-radioButton name="answer" [value]="q.incorrect_answers[1]" formControlName="answer" class="answer"></p-radioButton>
+          <label for="answerId">{{ q.incorrect_answers[1] }} </label>
 
-          <button pButton type="button" label="GO" (click)="start()" [disabled]="t.timer" class="go-btn"></button>
+          <p-radioButton name="answer" [value]="q.incorrect_answers[2]" formControlName="answer" class="answer"></p-radioButton>
+          <label for="answerId">{{ q.incorrect_answers[2] }} </label>
+
+          <button pButton type="submit" label="OK" [disabled]="!form.valid"></button>
+
+          <button pButton type="button" label="GO" (click)="start()" [disabled]="t.timer"></button>
         </form>
       </div>
     </ng-template>

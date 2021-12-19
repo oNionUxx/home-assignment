@@ -47,6 +47,9 @@ export class QuestionListComponent implements OnInit {
       if (selectedAnswer === currentQuestion.correct_answer) {
         this.isCorrect = true;
         this.totalUserAnswers += 1;
+        alert('Correct!, proceed to next question');
+
+        ++this.questionNumber;
       } else {
         this.isCorrect = false;
 
@@ -56,6 +59,7 @@ export class QuestionListComponent implements OnInit {
           ++this.questionNumber;
         } else {
           ++this.userStrikes;
+          alert('Wrong answer, give it another shot');
         }
       }
     }
@@ -86,7 +90,7 @@ export class QuestionListComponent implements OnInit {
   }
 
   // when a new question is shown
-  // user trikes is resets
+  // user strikes is resets
   // timer is resets
   // correct answer resets
   onNewQuestion(event): void {

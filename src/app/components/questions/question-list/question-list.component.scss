@@ -52,27 +52,16 @@
         width: fit-content;
       }
 
-      label {
-        width: fit-content;
-        padding: 0 0 0.3rem 0;
-        border-bottom: 2px solid transparent;
-      }
+      button {
+        width: 5rem;
 
-      label.wrong {
-        border-color: #d32f2f;
-      }
+        &:first-of-type {
+          margin-right: auto;
+        }
 
-      label.correct {
-        border-color: #689f38;
-      }
-
-      .go-btn {
-        width: fit-content;
-        margin: 0 0 0 auto;
-      }
-
-      .ok-btn {
-        margin: 0 auto 0 0;
+        &:last-of-type {
+          margin-left: auto;
+        }
       }
     }
   }
