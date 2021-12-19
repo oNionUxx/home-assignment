@@ -21,7 +21,7 @@ export class QuestionListComponent implements OnInit {
 
   @Output() quizWasEnded = new EventEmitter<number>();
 
-  startTime = 2;
+  startTime = 20;
   isCorrect: boolean;
 
   userStrikes = 1;
