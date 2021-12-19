@@ -1,0 +1,5 @@
+<app-question-list
+  [questions]="questions$ | async"
+  [errorMessage]="errorMessage$ | async"
+  (quizWasEnded)="getUserAnswers($event)"
+></app-question-list>

@@ -1,0 +1,35 @@
+<div class="questions" *ngIf="questions && { timer: timer$ | async } as t">
+  <p-carousel [value]="questions" [page]="questionNumber" (onPage)="onNewQuestion($event)">
+    <ng-template let-q pTemplate="item">
+      <div class="question">
+        <div class="question-content">
+          <h4>
+            Q:{{ questions.indexOf(q) + 1 }} <span>{{ q.question }} </span>
+          </h4>
+          <div class="time">
+            Time: <i class="pi pi-clock"></i>
+            <span>{{ !t.timer || t.timer === 0 ? startTime : t.timer }} SECONDS</span>
+          </div>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit(q)" class="form">
+          <p-radioButton name="answer" [value]="q.correct_answer" formControlName="answer" class="answer"></p-radioButton>
+          <label for="answerId" [ngClass]="{ correct: isCorrect }"
+            >{{ q.correct_answer }} <span>{{ isCorrect ? ' - Correct!' : '' }}</span>
+          </label>
+
+          <ng-container *ngFor="let incorrect_answer of q.incorrect_answers; index as i">
+            <p-radioButton name="answer" [value]="incorrect_answer" formControlName="answer" class="answer"></p-radioButton>
+            <label for="answerId" [ngClass]="{ wrong: !isCorrect && selectedIndex === i }"
+              >{{ incorrect_answer }} <span>{{ !isCorrect && selectedIndex === i ? ' - Wrong!' : '' }}</span></label
+            >
+          </ng-container>
+
+          <button pButton type="submit" label="OK" [disabled]="!form.valid" class="ok-btn"></button>
+
+          <button pButton type="button" label="GO" (click)="start()" [disabled]="t.timer" class="go-btn"></button>
+        </form>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>

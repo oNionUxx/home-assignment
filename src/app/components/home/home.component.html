@@ -1,0 +1,15 @@
+<div class="wrapper">
+  <button pButton type="button" label="START QUIZ" (click)="navigateToQuiz()" class="start-btn"></button>
+
+  <div class="user-score" *ngIf="_userScore">
+    <div class="header">USER SCORE</div>
+
+    <div class="body">
+      <h3>{{ _userScore === 20 ? 'You are a winner' : '' }}</h3>
+      <p>Correct answers : {{ _userScore }}</p>
+      <p>Incorrect answers: {{ 20 - _userScore }}</p>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
