@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, timer } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-
 import { Question } from '../../../models/question';
 
 @Component({
@@ -16,9 +16,6 @@ export class QuestionListComponent implements OnInit {
 
   @Input() questions: Question[];
   @Input() errorMessage: string;
-
-  questionsTmp: Question[];
-
   @Output() quizWasEnded = new EventEmitter<number>();
 
   startTime = 20;
@@ -36,6 +33,7 @@ export class QuestionListComponent implements OnInit {
       answer: new FormControl({ value: '', disabled: !this.timer$ }, Validators.required),
     });
   }
+
   ngOnInit(): void {}
 
   onSubmit(q: Question): void {
@@ -82,9 +80,11 @@ export class QuestionListComponent implements OnInit {
           if (this.questionNumber >= this.questions.length) {
             alert('Quiz has been completed!');
             this.quizWasEnded.emit(this.totalUserAnswers);
-          } // else {
-          //   alert('Sorry, but you ran out of time');
-          // }
+          } else {
+            console.log(i);
+
+            alert('Sorry, but you ran out of time');
+          }
         }
 
         return this.startTime - i;
