@@ -81,8 +81,6 @@ export class QuestionListComponent implements OnInit {
             alert('Quiz has been completed!');
             this.quizWasEnded.emit(this.totalUserAnswers);
           } else {
-            console.log(i);
-
             alert('Sorry, but you ran out of time');
           }
         }
