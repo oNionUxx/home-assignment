@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
 
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
 import { Observable, timer } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Question } from '../../../models/question';
@@ -28,13 +28,13 @@ export class QuestionListComponent implements OnInit {
   totalUserAnswers = 0;
   timer$: Observable<number>;
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit(): void {
     this.form = new FormGroup({
       answer: new FormControl({ value: '', disabled: !this.timer$ }, Validators.required),
     });
   }
-
-  ngOnInit(): void {}
 
   onSubmit(q: Question): void {
     const currentQuestion: Question = q;
@@ -45,9 +45,14 @@ export class QuestionListComponent implements OnInit {
 
       if (selectedAnswer === currentQuestion.correct_answer) {
         this.isCorrect = true;
-        this.totalUserAnswers += 1;
-        alert('Correct!, proceed to next question');
         ++this.questionNumber;
+        ++this.totalUserAnswers;
+
+        if (this.questions.length === this.questionNumber) {
+          this.quizWasEnded.emit(this.totalUserAnswers);
+        } else {
+          alert('Correct!, proceed to next question');
+        }
       } else {
         this.isCorrect = false;
 
