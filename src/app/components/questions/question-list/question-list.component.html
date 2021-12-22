@@ -13,17 +13,10 @@
         </div>
 
         <form [formGroup]="form" (ngSubmit)="onSubmit(q)" class="form">
-          <p-radioButton name="answer" [value]="q.correct_answer" formControlName="answer" class="answer"></p-radioButton>
-          <label for="answerId">{{ q.correct_answer }} </label>
-
-          <p-radioButton name="answer" [value]="q.incorrect_answers[0]" formControlName="answer" class="answer"></p-radioButton>
-          <label for="answerId">{{ q.incorrect_answers[0] }} </label>
-
-          <p-radioButton name="answer" [value]="q.incorrect_answers[1]" formControlName="answer" class="answer"></p-radioButton>
-          <label for="answerId">{{ q.incorrect_answers[1] }} </label>
-
-          <p-radioButton name="answer" [value]="q.incorrect_answers[2]" formControlName="answer" class="answer"></p-radioButton>
-          <label for="answerId">{{ q.incorrect_answers[2] }} </label>
+          <ng-container *ngFor="let answer of answers">
+            <p-radioButton name="answer" [value]="answer" formControlName="answer" class="answer"></p-radioButton>
+            <label for="answerId">{{ answer }} </label>
+          </ng-container>
 
           <button pButton type="submit" label="OK" [disabled]="!form.valid"></button>
 

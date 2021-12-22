@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, SimpleChanges, OnChanges } from '@angular/core';
 
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
 import { Observable, timer } from 'rxjs';
@@ -11,12 +11,14 @@ import { Question } from '../../../models/question';
   styleUrls: ['./question-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestionListComponent implements OnInit {
+export class QuestionListComponent implements OnInit, OnChanges {
   form: FormGroup;
 
   @Input() questions: Question[];
   @Input() errorMessage: string;
   @Output() quizWasEnded = new EventEmitter<number>();
+
+  answers: string[];
 
   startTime = 20;
   isCorrect: boolean;
@@ -34,6 +36,12 @@ export class QuestionListComponent implements OnInit {
     this.form = new FormGroup({
       answer: new FormControl({ value: '', disabled: !this.timer$ }, Validators.required),
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.questions && this.questions.length) {
+      this.getArrayOfAnswers();
+    }
   }
 
   onSubmit(q: Question): void {
@@ -106,5 +114,24 @@ export class QuestionListComponent implements OnInit {
     this.timer$ = null;
     this.isCorrect = null;
     this.form.get('answer').disable();
+    this.getArrayOfAnswers();
+  }
+
+  getArrayOfAnswers(): void {
+    this.answers = [
+      this.questions[this.questionNumber]['correct_answer'],
+      this.questions[this.questionNumber]['incorrect_answers'][0],
+      this.questions[this.questionNumber]['incorrect_answers'][1],
+      this.questions[this.questionNumber]['incorrect_answers'][2],
+    ];
+    this.shuffle(this.answers);
+  }
+
+  shuffle(arr: string[]): string[] {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
   }
 }
