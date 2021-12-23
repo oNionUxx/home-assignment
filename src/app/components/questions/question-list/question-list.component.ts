@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, SimpleChanges, OnChanges } from '@angular/core';
-
-import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Observable, timer } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Question } from '../../../models/question';
@@ -19,16 +18,16 @@ export class QuestionListComponent implements OnInit, OnChanges {
   @Output() quizWasEnded = new EventEmitter<number>();
 
   answers: string[];
-
-  startTime = 20;
-  isCorrect: boolean;
-
+  isCorrect = false;
+  startTime = 5;
   userStrikes = 1;
-  selectedIndex = -1;
-
   questionNumber = 0;
   totalUserAnswers = 0;
   timer$: Observable<number>;
+
+  get answer(): AbstractControl {
+    return this.form.get('answer');
+  }
 
   constructor() {}
 
@@ -40,7 +39,7 @@ export class QuestionListComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.questions && this.questions.length) {
-      this.getArrayOfAnswers();
+      this.buildArrayOfAnswers();
     }
   }
 
@@ -49,29 +48,31 @@ export class QuestionListComponent implements OnInit, OnChanges {
 
     if (this.form.valid) {
       const selectedAnswer = this.form.value.answer;
-      this.selectedIndex = currentQuestion.incorrect_answers.indexOf(selectedAnswer);
+      const { correct_answer } = currentQuestion;
 
-      if (selectedAnswer === currentQuestion.correct_answer) {
-        this.isCorrect = true;
-        ++this.questionNumber;
+      // user's answer is correct
+      if (selectedAnswer === correct_answer) {
         ++this.totalUserAnswers;
 
-        if (this.questions.length === this.questionNumber) {
+        // quiz was ended
+        if (this.questionNumber >= this.questions.length) {
+          alert('Quiz has been completed!');
           this.quizWasEnded.emit(this.totalUserAnswers);
         } else {
+          this.isCorrect = true;
           alert('Correct!, proceed to next question');
+          ++this.questionNumber;
         }
+        //user's answer is incorrect
       } else {
-        this.isCorrect = false;
-
         // if user got 3 strikes next
         // question will be displayed
         if (this.userStrikes === 3) {
           alert('Sorry, too many tries');
           ++this.questionNumber;
         } else {
-          ++this.userStrikes;
           alert('Wrong answer, give it another shot');
+          ++this.userStrikes;
         }
       }
     }
@@ -80,25 +81,30 @@ export class QuestionListComponent implements OnInit, OnChanges {
   start(): void {
     // user can select an answer
     // only when the countdown starts
-    this.form.get('answer').enable();
+    this.answer.enable();
 
     this.timer$ = timer(0, 1000).pipe(
-      map((i) => {
+      map((countdown) => {
         // when the user's time runs out
         // next question will be displayed
-        if (i === this.startTime) {
-          ++this.questionNumber;
-
+        if (this.startTime === countdown) {
           // quiz was ended
           if (this.questionNumber >= this.questions.length) {
             alert('Quiz has been completed!');
             this.quizWasEnded.emit(this.totalUserAnswers);
           } else {
-            alert('Sorry, but you ran out of time');
+            // user has managed to answer the
+            // question before the countdown
+            // has finished
+            if (!this.isCorrect) {
+              alert('Sorry, but you ran out of time');
+              ++this.questionNumber;
+              this.isCorrect = false;
+            }
           }
         }
 
-        return this.startTime - i;
+        return this.startTime - countdown;
       }),
       take(this.startTime + 1)
     );
@@ -108,30 +114,22 @@ export class QuestionListComponent implements OnInit, OnChanges {
   // user strikes is resets
   // timer is resets
   // correct answer resets
-  onNewQuestion(event): void {
+  onNewQuestion(): void {
     this.userStrikes = 1;
-    this.selectedIndex = -1;
     this.timer$ = null;
-    this.isCorrect = null;
-    this.form.get('answer').disable();
-    this.getArrayOfAnswers();
+    this.answer.disable();
+    this.buildArrayOfAnswers();
   }
 
-  getArrayOfAnswers(): void {
-    this.answers = [
-      this.questions[this.questionNumber]['correct_answer'],
-      this.questions[this.questionNumber]['incorrect_answers'][0],
-      this.questions[this.questionNumber]['incorrect_answers'][1],
-      this.questions[this.questionNumber]['incorrect_answers'][2],
-    ];
-    this.shuffle(this.answers);
+  buildArrayOfAnswers(): void {
+    this.answers = [this.questions[this.questionNumber]['correct_answer'], ...this.questions[this.questionNumber]['incorrect_answers']];
+    this.shuffle();
   }
 
-  shuffle(arr: string[]): string[] {
-    for (let i = arr.length - 1; i > 0; i--) {
+  shuffle(): void {
+    this.answers.map((_answer, i) => {
       const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
+      return ([this.answers[i], this.answers[j]] = [this.answers[j], this.answers[i]]);
+    });
   }
 }

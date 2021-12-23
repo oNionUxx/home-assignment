@@ -1,5 +1,5 @@
 <div class="questions" *ngIf="questions && { timer: timer$ | async } as t">
-  <p-carousel [value]="questions" [page]="questionNumber" (onPage)="onNewQuestion($event)">
+  <p-carousel [value]="questions" [page]="questionNumber" (onPage)="onNewQuestion()">
     <ng-template let-q pTemplate="item">
       <div class="question">
         <div class="question-content">
