@@ -19,7 +19,7 @@ export class QuestionListComponent implements OnInit, OnChanges {
 
   answers: string[];
   isCorrect = false;
-  startTime = 5;
+  startTime = 20;
   userStrikes = 1;
   questionNumber = 0;
   totalUserAnswers = 0;
@@ -99,7 +99,6 @@ export class QuestionListComponent implements OnInit, OnChanges {
             if (!this.isCorrect) {
               alert('Sorry, but you ran out of time');
               ++this.questionNumber;
-              this.isCorrect = false;
             }
           }
         }
@@ -115,6 +114,7 @@ export class QuestionListComponent implements OnInit, OnChanges {
   // timer is resets
   // correct answer resets
   onNewQuestion(): void {
+    this.isCorrect = false;
     this.userStrikes = 1;
     this.timer$ = null;
     this.answer.disable();
