@@ -10,6 +10,9 @@ import { QuestionApiActions, QuestionPageActions } from './actions';
 
 @Injectable()
 export class QuestionEffects {
+  // Inject Actions from @ngrx/effects
+  constructor(private actions$: Actions, private questionsService: QuestionsService) {}
+
   loadProducts$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(QuestionPageActions.loadQuestions),
@@ -21,7 +24,4 @@ export class QuestionEffects {
       )
     );
   });
-
-  // Inject Actions from @ngrx/effects
-  constructor(private actions$: Actions, private questionsService: QuestionsService) {}
 }

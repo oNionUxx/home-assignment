@@ -1,11 +1,12 @@
 <div class="questions" *ngIf="questions && { timer: timer$ | async } as t">
-  <p-carousel [value]="questions" [page]="questionNumber" (onPage)="onNewQuestion()">
+  <p-carousel [value]="questions" [page]="questionNumber" (onPage)="onChangedQuestion()">
     <ng-template let-q pTemplate="item">
       <div class="question">
         <div class="question-content">
           <h4>
             Q:{{ questions.indexOf(q) + 1 }} <span>{{ q.question }} </span>
           </h4>
+
           <div class="time">
             Time: <i class="pi pi-clock"></i>
             <span>{{ !t.timer || t.timer === 0 ? startTime : t.timer }} SECONDS</span>

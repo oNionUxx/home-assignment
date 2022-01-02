@@ -93,9 +93,8 @@ export class QuestionListComponent implements OnInit, OnChanges {
             alert('Quiz has been completed!');
             this.quizWasEnded.emit(this.totalUserAnswers);
           } else {
-            // user has managed to answer the
-            // question before the countdown
-            // has finished
+            // user has managed to answer the question
+            // before the countdown has finished
             if (!this.isCorrect) {
               alert('Sorry, but you ran out of time');
               ++this.questionNumber;
@@ -113,7 +112,7 @@ export class QuestionListComponent implements OnInit, OnChanges {
   // user strikes is resets
   // timer is resets
   // correct answer resets
-  onNewQuestion(): void {
+  onChangedQuestion(): void {
     this.isCorrect = false;
     this.userStrikes = 1;
     this.timer$ = null;

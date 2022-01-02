@@ -16,10 +16,10 @@ export class QuestionsService {
 
   constructor(private http: HttpClient) {}
 
-  getQuestions(): Observable<any> {
+  getQuestions(): Observable<Question[]> {
     return this.http.get<any>(this.questionsUrl).pipe(
       map((data) => data.results),
-      tap((data) => console.log(JSON.stringify(data))),
+      tap((results) => console.log(JSON.stringify(results))),
       catchError(this.handleError)
     );
   }

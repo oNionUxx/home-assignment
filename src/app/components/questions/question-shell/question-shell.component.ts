@@ -8,7 +8,7 @@ import { Question } from '../../../models/question';
 import { Store } from '@ngrx/store';
 import { State, getQuestions, getError } from '../state';
 import { QuestionPageActions } from '../state/actions';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-question-shell',
